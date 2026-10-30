@@ -1,0 +1,13 @@
+pandas
+numpy
+xgboost
+joblib
+fastapi
+uvicorn
+pydantic
+scikit-learn
+pytest
+httpx
+psycopg2-binary 
+python-dotenv
+shap
