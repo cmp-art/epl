@@ -2,9 +2,9 @@ name: Weekly Data Update
 
 on:
   schedule:
-    # Runs at 08:00 UTC every Monday morning
-    - cron: '0 8 * * 1'
-  workflow_dispatch: # Allows you to trigger it manually
+    
+    - cron: '0 8 * * 2'
+  workflow_dispatch: 
 
 jobs:
   update-data:
