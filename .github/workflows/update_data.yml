@@ -1,0 +1,37 @@
+name: Weekly Data Update
+
+on:
+  schedule:
+    # Runs at 08:00 UTC every Monday morning
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allows you to trigger it manually
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas requests python-dotenv
+          
+      - name: Run Data Update Script
+        env:
+          FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
+        run: python scripts/update_data.py
+        
+      - name: Commit and Push New Data
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
+          git add data/historical_matches.csv
+          # Only commit if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated data update" && git push)
