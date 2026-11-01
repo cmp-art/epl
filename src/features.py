@@ -1,39 +1,101 @@
 import pandas as pd 
 import numpy as np
+import json
 
 def generate_match_features(d) :
     
     df=pd.read_csv(d)
-   
-    team_df=df[['hometeam','awayteam']]
-    # target=df['ftr']
+    df=df.sort_values(by='datetime').reset_index(drop=True)
     
+    elo_dict={}
+    form_tracker={}
+    
+    home_elo,away_elo=[],[]
+    home_form,away_form=[],[]
+    home_goals_scored,away_goals_scored=[],[]
+    home_goals_conceded,away_goals_conceded=[],[]
+    
+    for index,row in df.iterrows():
+        ht=row['hometeam']
+        at=row['awayteam'] 
+        
+        if ht not in elo_dict:
+            elo_dict[ht]=1500
+            form_tracker[ht]={'points':[],'scored':[],'conceded':[]}
+        if at not in elo_dict:
+            elo_dict[at]=1500
+            form_tracker[at]={'points':[],'scored':[],'conceded':[]}
+            
+        home_elo.append(elo_dict[ht])
+        away_elo.append(elo_dict[at])
+        
+        home_form.append(np.mean(form_tracker[ht]['points'][-5:]) if form_tracker[ht]['points']else 0)
+        away_form.append(np.mean(form_tracker[at]['points'][-5:]) if form_tracker[at]['points'] else 0)
+        
+        home_goals_scored.append(np.mean(form_tracker[ht]['scored'][-5:]) if form_tracker[ht]['scored'] else 0)
+        away_goals_scored.append(np.mean(form_tracker[at]['scored'][-5:]) if form_tracker[at]['scored'] else 0)
+        
+        home_goals_conceded.append(np.mean(form_tracker[ht]['conceded'][-5:]) if form_tracker[ht]['conceded'] else 0)
+        away_goals_conceded.append(np.mean(form_tracker[at]['conceded'][-5:]) if form_tracker[ht]['conceded'] else 0)
+        
+        ftr=row['ftr']
+        h_goals,a_goals=row['fthg'],row['ftag']
+        
+        h_pts=3 if ftr == 'H' else (1 if ftr =='D' else 0)
+        a_pts=3 if ftr == 'A' else (1 if ftr =='D' else 0)
+        
+        form_tracker[ht]['points'].append(h_pts)
+        form_tracker[ht]['scored'].append(h_goals)
+        form_tracker[ht]['conceded'].append(a_goals)
+        form_tracker[at]['points'].append(a_pts)
+        form_tracker[at]['scored'].append(a_goals)
+        form_tracker[at]['conceded'].append(h_goals)
+        
+        dr=elo_dict[ht]-elo_dict[at]+ 100
+        expected_h=1/(1+10**(-dr/100))
+        expected_a=1/(1+10**(dr/100))
+        
+        sa=1 if ftr == 'H' else(0.5 if ftr =='D'else 0)
+        sb= 1 if ftr == 'A' else(0.5 if ftr =='D'else 0)
+        
+        elo_dict[ht] += 20 * (sa-expected_h)
+        elo_dict[at] += 20 * (sb-expected_a)
+        
+    df['home_elo'] = home_elo
+    df['away_elo'] = away_elo
+    df['home_form'] = home_form
+    df['away_form'] = away_form
+    df['home_goals_scored'] = home_goals_scored
+    df['away_goals_scored'] = away_goals_scored
+    df['home_goals_conceded'] = home_goals_conceded
+    df['away_goals_conceded'] = away_goals_conceded
+    
+    latest_stats= {}
+    for team in elo_dict.keys():
+        latest_stats[team]={
+            'elo':elo_dict[team],
+            'form':np.mean(form_tracker[team]['points'][-5:]) if form_tracker[team]['points'] else 0 ,
+            'goals_scored':np.mean(form_tracker[team]['scored'][-5:]) if form_tracker[team]['scored'] else 0,
+            'goals_conceded':np.mean(form_tracker[team]['conceded'][-5:]) if form_tracker[team]['conceded'] else 0
+        }
+    with open('models/latest_stats.json','w') as f:
+        json.dump(latest_stats,f)
+        
     df['ftr_encoded']=df['ftr'].map({'A':0,'H':2,'D':1})
-    
-    drop_f=['fthg', 'ftag', 'hthg', 'htag','hs', 'as', 'hst', 'ast', 'hr', 'ar','hometeam','ftr','awayteam','hy', 'htr']
+    drop_f = [
+        'fthg', 'ftag', 'hthg', 'htag', 'hs', 'as', 'hst', 'ast', 
+        'hr', 'ar', 'ftr', 'hy', 'ay', 'hf', 'af', 'hc', 'ac', 
+        'htr', 'datetime', 'referee'
+    ]
     df_new=df.drop(columns=drop_f,errors='ignore')
     
-    df_dumm=pd.get_dummies(df_new,drop_first=True,dtype=int)
+    print('Featuring done with dynamic metrics')
+    df_new.to_csv('data/feature.csv',index=False)
     
-    #df_dumm=pd.concat([df_dumm,target],axis=1)
-    
-    corr_mat=df_dumm.corr()['ftr_encoded'].abs()
-    relevant_col=corr_mat[corr_mat>0.10].index.to_list()
-    df_clear=df_dumm[relevant_col]
-    
-    
-    correlat_mat=df_clear.corr().abs()
-    upper=correlat_mat.where(np.triu(np.ones(correlat_mat.shape),k=1).astype(bool))
-    reduct=[col for col in upper.columns if any(upper[col]>0.85)]
-    df_clear=df_clear.drop(columns=reduct)
-    
-    df_clear=pd.concat([df_clear,team_df],axis=1)
-    
-    print('featuring done')
-    
-    df_clear.to_csv('data/feature.csv',index=False)
-    
-    return df_clear
-    
-    
+    return df_new        
+        
+if __name__ == "__main__": generate_match_features('data/clean.csv')      
+        
+            
+          
     
