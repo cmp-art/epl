@@ -1,0 +1,91 @@
+hometeam,awayteam,fthg,ftag,datetime
+Arsenal FC,Coventry City FC,3,0,2026-08-21T19:00:00Z
+Hull City AFC,Manchester United FC,2,0,2026-08-22T11:30:00Z
+Ipswich Town FC,Sunderland AFC,2,1,2026-08-22T14:00:00Z
+Nottingham Forest FC,Leeds United FC,0,1,2026-08-22T14:00:00Z
+Everton FC,Crystal Palace FC,2,0,2026-08-22T14:00:00Z
+Brentford FC,Tottenham Hotspur FC,3,0,2026-08-22T16:30:00Z
+Manchester City FC,AFC Bournemouth,2,1,2026-08-23T13:00:00Z
+Brighton & Hove Albion FC,Aston Villa FC,4,0,2026-08-23T13:00:00Z
+Newcastle United FC,Liverpool FC,2,2,2026-08-23T15:30:00Z
+Fulham FC,Chelsea FC,2,3,2026-08-24T19:00:00Z
+Crystal Palace FC,Manchester City FC,1,4,2026-08-28T19:00:00Z
+Liverpool FC,Nottingham Forest FC,2,2,2026-08-29T11:30:00Z
+AFC Bournemouth,Everton FC,1,1,2026-08-29T14:00:00Z
+Coventry City FC,Hull City AFC,0,1,2026-08-29T14:00:00Z
+Tottenham Hotspur FC,Newcastle United FC,0,2,2026-08-29T16:30:00Z
+Sunderland AFC,Fulham FC,1,0,2026-08-30T13:00:00Z
+Chelsea FC,Brighton & Hove Albion FC,4,3,2026-08-30T13:00:00Z
+Leeds United FC,Brentford FC,1,1,2026-08-30T13:00:00Z
+Manchester United FC,Ipswich Town FC,5,2,2026-08-30T15:30:00Z
+Aston Villa FC,Arsenal FC,0,1,2026-08-31T19:00:00Z
+Ipswich Town FC,Liverpool FC,0,2,2026-09-04T19:00:00Z
+Newcastle United FC,AFC Bournemouth,2,2,2026-09-05T11:30:00Z
+Nottingham Forest FC,Tottenham Hotspur FC,0,0,2026-09-05T14:00:00Z
+Manchester City FC,Coventry City FC,1,0,2026-09-05T14:00:00Z
+Brighton & Hove Albion FC,Leeds United FC,1,1,2026-09-05T14:00:00Z
+Brentford FC,Sunderland AFC,1,1,2026-09-05T14:00:00Z
+Fulham FC,Crystal Palace FC,2,3,2026-09-05T14:00:00Z
+Hull City AFC,Aston Villa FC,0,0,2026-09-05T16:30:00Z
+Everton FC,Manchester United FC,2,2,2026-09-06T13:00:00Z
+Arsenal FC,Chelsea FC,2,1,2026-09-06T15:30:00Z
+Crystal Palace FC,Ipswich Town FC,2,3,2026-09-12T14:00:00Z
+Liverpool FC,Fulham FC,0,0,2026-09-12T14:00:00Z
+Aston Villa FC,Nottingham Forest FC,1,2,2026-09-12T14:00:00Z
+AFC Bournemouth,Brentford FC,2,2,2026-09-12T14:00:00Z
+Chelsea FC,Hull City AFC,2,2,2026-09-12T14:00:00Z
+Tottenham Hotspur FC,Everton FC,0,0,2026-09-12T16:30:00Z
+Sunderland AFC,Arsenal FC,0,2,2026-09-12T19:00:00Z
+Coventry City FC,Brighton & Hove Albion FC,0,5,2026-09-13T13:00:00Z
+Manchester United FC,Manchester City FC,0,1,2026-09-13T15:30:00Z
+Leeds United FC,Newcastle United FC,4,1,2026-09-14T19:00:00Z
+Brentford FC,Chelsea FC,3,0,2026-09-18T19:00:00Z
+Tottenham Hotspur FC,Aston Villa FC,2,3,2026-09-19T11:30:00Z
+Everton FC,Ipswich Town FC,1,0,2026-09-19T14:00:00Z
+Brighton & Hove Albion FC,Arsenal FC,3,0,2026-09-19T14:00:00Z
+Newcastle United FC,Hull City AFC,2,1,2026-09-19T14:00:00Z
+Nottingham Forest FC,Coventry City FC,0,1,2026-09-19T16:30:00Z
+AFC Bournemouth,Liverpool FC,0,1,2026-09-20T13:00:00Z
+Leeds United FC,Crystal Palace FC,0,0,2026-09-20T13:00:00Z
+Manchester City FC,Sunderland AFC,5,3,2026-09-20T13:00:00Z
+Fulham FC,Manchester United FC,1,1,2026-09-20T15:30:00Z
+Arsenal FC,Leeds United FC,2,1,2026-10-10T11:30:00Z
+Sunderland AFC,Brighton & Hove Albion FC,0,2,2026-10-10T14:00:00Z
+Chelsea FC,AFC Bournemouth,5,1,2026-10-10T14:00:00Z
+Ipswich Town FC,Fulham FC,2,1,2026-10-10T14:00:00Z
+Aston Villa FC,Brentford FC,2,2,2026-10-10T14:00:00Z
+Manchester United FC,Tottenham Hotspur FC,1,1,2026-10-10T16:30:00Z
+Hull City AFC,Everton FC,2,2,2026-10-11T13:00:00Z
+Crystal Palace FC,Nottingham Forest FC,3,1,2026-10-11T13:00:00Z
+Liverpool FC,Manchester City FC,0,3,2026-10-11T15:30:00Z
+Coventry City FC,Newcastle United FC,4,1,2026-10-12T19:00:00Z
+Everton FC,Chelsea FC,0,2,2026-10-17T11:30:00Z
+Fulham FC,Hull City AFC,1,0,2026-10-17T14:00:00Z
+Manchester City FC,Ipswich Town FC,3,2,2026-10-17T14:00:00Z
+Brentford FC,Liverpool FC,1,2,2026-10-17T14:00:00Z
+Newcastle United FC,Aston Villa FC,0,1,2026-10-17T16:30:00Z
+AFC Bournemouth,Sunderland AFC,2,0,2026-10-18T13:00:00Z
+Leeds United FC,Manchester United FC,1,1,2026-10-18T13:00:00Z
+Brighton & Hove Albion FC,Crystal Palace FC,5,0,2026-10-18T13:00:00Z
+Nottingham Forest FC,Arsenal FC,0,1,2026-10-18T15:30:00Z
+Tottenham Hotspur FC,Coventry City FC,3,1,2026-10-19T19:00:00Z
+Ipswich Town FC,Nottingham Forest FC,1,1,2026-10-23T19:00:00Z
+Aston Villa FC,Manchester City FC,2,1,2026-10-24T11:30:00Z
+Arsenal FC,Everton FC,2,0,2026-10-24T14:00:00Z
+Coventry City FC,Fulham FC,0,1,2026-10-24T14:00:00Z
+Chelsea FC,Tottenham Hotspur FC,0,2,2026-10-24T16:30:00Z
+Liverpool FC,Brighton & Hove Albion FC,2,0,2026-10-25T14:00:00Z
+Crystal Palace FC,Newcastle United FC,0,2,2026-10-25T14:00:00Z
+Manchester United FC,AFC Bournemouth,0,3,2026-10-25T14:00:00Z
+Hull City AFC,Brentford FC,1,1,2026-10-25T14:00:00Z
+Sunderland AFC,Leeds United FC,0,0,2026-10-25T16:30:00Z
+Chelsea FC,Manchester United FC,2,0,2026-10-31T12:30:00Z
+Manchester City FC,Brighton & Hove Albion FC,0,1,2026-10-31T15:00:00Z
+AFC Bournemouth,Leeds United FC,2,0,2026-10-31T15:00:00Z
+Coventry City FC,Sunderland AFC,3,1,2026-10-31T15:00:00Z
+Hull City AFC,Ipswich Town FC,2,2,2026-10-31T15:00:00Z
+Brentford FC,Nottingham Forest FC,2,0,2026-10-31T15:00:00Z
+Tottenham Hotspur FC,Crystal Palace FC,2,0,2026-10-31T17:30:00Z
+Aston Villa FC,Fulham FC,1,1,2026-10-31T20:00:00Z
+Liverpool FC,Arsenal FC,0,1,2026-11-01T16:30:00Z
+Newcastle United FC,Everton FC,0,1,2026-11-02T20:00:00Z
