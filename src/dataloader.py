@@ -23,3 +23,6 @@ def load_and_clean(file) :
     df.to_csv("data/clean.csv",index=False) 
     
     return df    
+
+if __name__ == "__main__":
+    load_and_clean('data/historical_data.csv')
