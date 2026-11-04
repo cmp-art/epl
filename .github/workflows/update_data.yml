@@ -33,6 +33,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "action@github.com"
-          git add data/historical_matches.csv
+          git add -f data/historical_matches.csv
           # Only commit if there are changes
           git diff --quiet && git diff --staged --quiet || (git commit -m "Automated data update" && git push)
