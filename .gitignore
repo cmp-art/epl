@@ -2,3 +2,4 @@
 __pycache__/
 data/
 .env
+!data/historical_matches.csv
