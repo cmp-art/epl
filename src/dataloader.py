@@ -18,11 +18,14 @@ def load_and_clean(file) :
     
     df.columns=[i.strip().lower().replace(" ","_") for i in df.columns ] 
     
-    df['datetime']=pd.to_datetime(df['datetime']) 
+    if 'date' in df.columns:
+        df.rename(columns={'date':'datetime'}, inplace=True)
+        
+    df['datetime']=pd.to_datetime(df['datetime'],format='mixed',dayfirst=True) 
     print("cleaning done")
     df.to_csv("data/clean.csv",index=False) 
     
     return df    
 
 if __name__ == "__main__":
-    load_and_clean('data/historical_data.csv')
+    load_and_clean('data/historical_matches.csv')

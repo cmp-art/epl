@@ -7,6 +7,10 @@ import os
 def train_and_save (path, model_path):
     df=pd.read_csv(path)
     
+    df.columns=df.columns.str.replace(r'[\[\]]','_',regex=True)
+    df.columns=df.columns.str.replace('>','_above_',regex=False)
+    df.columns=df.columns.str.replace('<','_under_',regex=False)
+    
     df['hometeam']=df['hometeam'].astype('category')
     df['awayteam']=df['awayteam'].astype('category')
      
