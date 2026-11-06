@@ -40,11 +40,11 @@ def update_dataset_and_db(matches):
         a_score = match['score']['fullTime']['away']
         
         new_data.append({
-            "hometeam": ht,
-            "awayteam": at,
-            "fthg": h_score,
-            "ftag": a_score,
-            "datetime": match['utcDate']
+            "HomeTeam": ht,
+            "AwayTeam": at,
+            "FTHG": h_score,
+            "FTAG": a_score,
+            "Date": match['utcDate']
         })
         
         if cursor:
@@ -78,7 +78,7 @@ def update_dataset_and_db(matches):
     # Check if the historical file exists before trying to read it
     if os.path.exists(csv_path):
         existing_df = pd.read_csv(csv_path)
-        updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['datetime', 'hometeam'])
+        updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['Date', 'HomeTeam'])
     else:
         print(f"{csv_path} not found. Creating a new one.")
         updated_df = new_df
