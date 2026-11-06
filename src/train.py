@@ -7,12 +7,14 @@ import os
 def train_and_save (path, model_path):
     df=pd.read_csv(path)
     
+    all_teams = pd.unique(pd.concat([df['hometeam'], df['awayteam']]).dropna())
+    
     df.columns=df.columns.str.replace(r'[\[\]]','_',regex=True)
     df.columns=df.columns.str.replace('>','_above_',regex=False)
     df.columns=df.columns.str.replace('<','_under_',regex=False)
     
-    df['hometeam']=df['hometeam'].astype('category')
-    df['awayteam']=df['awayteam'].astype('category')
+    df['hometeam'] = pd.Categorical(df['hometeam'], categories=all_teams)
+    df['awayteam'] = pd.Categorical(df['awayteam'], categories=all_teams)
      
     
     x=df.drop(columns=['ftr_encoded'])

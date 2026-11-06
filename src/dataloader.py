@@ -14,14 +14,16 @@ def load_and_clean(file) :
         if df[col].isna().sum() > 0:
             df[col]=df[col].fillna(0)
             
-    df=df.dropna()
+    essential_columns = ['hometeam', 'awayteam', 'fthg', 'ftag', 'datetime']
+    existing_essentials=[col for col in essential_columns if col in df.columns]
+    df=df.dropna(subset=existing_essentials)
     
     df.columns=[i.strip().lower().replace(" ","_") for i in df.columns ] 
     
     if 'date' in df.columns:
         df.rename(columns={'date':'datetime'}, inplace=True)
         
-    df['datetime']=pd.to_datetime(df['datetime'],format='mixed',dayfirst=True) 
+    df['datetime']=pd.to_datetime(df['datetime'],format='mixed',dayfirst=True , utc=True) 
     print("cleaning done")
     df.to_csv("data/clean.csv",index=False) 
     

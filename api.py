@@ -64,7 +64,8 @@ def Prediction_match(match:Modelrequest):
         }
         
         df=pd.DataFrame([input_data])
-    
+        
+        
         df['hometeam']=df['hometeam'].astype('category')
         df['awayteam']=df['awayteam'].astype('category')
     
