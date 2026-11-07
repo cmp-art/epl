@@ -1,0 +1,45 @@
+name: EPL Model Auto-Update
+
+on:
+  schedule:
+    # Runs at 03:00 AM every Monday automatically
+    - cron: '0 10 * * 2'
+  workflow_dispatch: # Gives you a manual "Run Workflow" button on GitHub
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' 
+          cache: 'pip' # Speeds up future runs
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run ML Pipeline
+        run: |
+          # python update_data.py  <-- Uncomment this if you have a script that scrapes new matches
+          python src/dataloader.py
+          python src/features.py
+          python src/train.py
+
+      - name: Commit and Push new data/models
+        run: |
+          # Set up the GitHub Actions bot identity
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Stage the updated data and model folders
+          git add data/ models/
+          
+          # Check if there are actually changes to commit, then commit and push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Auto-update: Refreshed data and retrained XGBoost model" && git push)
