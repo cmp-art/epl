@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel , field_validator
+from pydantic import BaseModel, field_validator
 import pandas as pd
 import joblib
 import os
@@ -10,46 +10,52 @@ import shap
 import json
 
 load_dotenv()
-DATABASE_URL=os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-
-app=FastAPI(title='Epl result prediction',version='1.0')
+app = FastAPI(title='EPL Result Prediction', version='1.0')
 
 try:
-    db_pool=pool.SimpleConnectionPool(1,20,DATABASE_URL)
+    db_pool = pool.SimpleConnectionPool(1, 20, DATABASE_URL)
 except Exception as e:
-    print(f"Failed to establish pool:{e}")
-    db_pool=None    
+    print(f"Failed to establish pool: {e}")
+    db_pool = None    
 
-rmodel=joblib.load('models/predict.joblib')
-feat=joblib.load('models/features.joblib')
+# Load models and stats
+rmodel = joblib.load('models/predict.joblib')
+feat = joblib.load('models/features.joblib')
 
-with open('models/latest_stats.json','r') as f:
-    latest_stats=json.load(f)
+with open('models/latest_stats.json', 'r') as f:
+    latest_stats = json.load(f)
     
-explainer=shap.TreeExplainer(rmodel)
+explainer = shap.TreeExplainer(rmodel)
+
+# Create a master list of all known teams from our features pipeline
+valid_teams = list(latest_stats.keys())
 
 class Modelrequest(BaseModel):
-    hometeam:str
-    awayteam:str
-    @field_validator('hometeam','awayteam',mode='before')
+    hometeam: str
+    awayteam: str
+    
+    @field_validator('hometeam', 'awayteam', mode='before')
     @classmethod
-    def normalize_team_names(cls, value:str)-> str:
+    def normalize_team_names(cls, value: str) -> str:
         return value.strip().title()
     
 @app.post('/predict')
-def Prediction_match(match:Modelrequest):
-    
+def Prediction_match(match: Modelrequest):
     try:
-        
         ht = match.hometeam
         at = match.awayteam
         
-        # Look up current stats. If team is new, use baseline defaults
-        ht_stats = latest_stats.get(ht, {'elo': 1500, 'form': 0, 'goals_scored': 0, 'goals_conceded': 0})
-        at_stats = latest_stats.get(at, {'elo': 1500, 'form': 0, 'goals_scored': 0, 'goals_conceded': 0})
+        # 1. VERIFY TEAMS EXIST IN DATASET (Prevents 500 Server Errors on bad spelling)
+        if ht not in valid_teams:
+            raise HTTPException(status_code=400, detail=f"Home team '{ht}' not found. Check spelling. Valid teams include: {', '.join(valid_teams[:10])}...")
+        if at not in valid_teams:
+            raise HTTPException(status_code=400, detail=f"Away team '{at}' not found. Check spelling.")
         
-        # Reconstruct the DataFrame with all required features
+        ht_stats = latest_stats[ht]
+        at_stats = latest_stats[at]
+        
         input_data = {
             'hometeam': ht,
             'awayteam': at,
@@ -63,32 +69,32 @@ def Prediction_match(match:Modelrequest):
             'away_goals_conceded': at_stats['goals_conceded']
         }
         
-        df=pd.DataFrame([input_data])
-        
-        
-        df['hometeam']=df['hometeam'].astype('category')
-        df['awayteam']=df['awayteam'].astype('category')
+        df = pd.DataFrame([input_data])
     
-        df=df[feat]
+        # 2. ENFORCE GLOBAL CATEGORIES (Fixes the XGBoost new team crash)
+        df['hometeam'] = pd.Categorical(df['hometeam'], categories=valid_teams)
+        df['awayteam'] = pd.Categorical(df['awayteam'], categories=valid_teams)
     
-        pred=int(rmodel.predict(df)[0])
+        df = df[feat]
+    
+        pred = int(rmodel.predict(df)[0])
         
-        shap_value=explainer.shap_values(df)
+        shap_value = explainer.shap_values(df)
         
-        if isinstance(shap_value,list):
-            pred_shap=shap_value[pred][0]
+        if isinstance(shap_value, list):
+            pred_shap = shap_value[pred][0]
         else:
-            pred_shap=shap_value[0,:,pred]    
+            pred_shap = shap_value[0, :, pred]    
             
-        feat_impact={f:round(float(val),4) for f,val in zip(feat,pred_shap)}    
-        top_reason=dict(sorted(feat_impact.items(),key= lambda x:abs(x[1]),reverse=True)[:3])
+        feat_impact = {f: round(float(val), 4) for f, val in zip(feat, pred_shap)}    
+        top_reason = dict(sorted(feat_impact.items(), key=lambda x: abs(x[1]), reverse=True)[:3])
     
         if pred == 2:
-           res=f"{input_data['hometeam']} wins"
+           res = f"{input_data['hometeam']} wins"
         elif pred == 0:
-           res=f"{input_data['awayteam']} wins"
+           res = f"{input_data['awayteam']} wins"
         else:
-           res='draw'
+           res = 'draw'
            
         if db_pool:
             try:
@@ -102,16 +108,17 @@ def Prediction_match(match:Modelrequest):
             except Exception as db_error: 
                 print(f'Failed to log to database {db_error}')
             finally:
-                # Always return the connection to the pool
                 db_pool.putconn(conn)  
         
         return {
-         'status':'successful',
-         'hometeam':input_data['hometeam'],
-         'awayteam':input_data['awayteam'],
-         'prediction':res,
-         'explanation':top_reason
+         'status': 'successful',
+         'hometeam': input_data['hometeam'],
+         'awayteam': input_data['awayteam'],
+         'prediction': res,
+         'explanation': top_reason
         }               
     
-    except HTTPException as e  :  
-        raise HTTPException(status_code=404,detail=str(e))
+    except HTTPException as e:  
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

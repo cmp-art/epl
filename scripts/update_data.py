@@ -13,6 +13,27 @@ if not API_KEY:
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL environment variable is missing or empty.")
 
+TEAM_NAME_MAP = {
+    "Coventry City FC": "Coventry",
+    "Hull City AFC": "Hull",
+    "Sunderland AFC": "Sunderland",
+    "Nottingham Forest FC": "Nott'm Forest",
+    "Tottenham Hotspur FC": "Tottenham",
+    "Leicester City FC": "Leicester",
+    "Leeds United FC": "Leeds",
+    "Norwich City FC": "Norwich",
+    "Newcastle United FC": "Newcastle",
+    "Manchester United FC":"Man United",
+    "Manchester City FC":"Man City"
+}
+
+def clean_team_name(name):
+    if name in TEAM_NAME_MAP:
+        return TEAM_NAME_MAP[name]
+    
+    name=name.replace(" FC","").replace(" AFC","")
+    return name.strip()
+
 def fetch_latest_result():
     url = "https://api.football-data.org/v4/competitions/PL/matches?status=FINISHED"
     headers = {"X-AUTH-TOKEN": API_KEY}
@@ -34,8 +55,8 @@ def update_dataset_and_db(matches):
         conn, cursor = None, None
 
     for match in matches:
-        ht = match['homeTeam']['name']
-        at = match['awayTeam']['name']
+        ht = clean_team_name(match['homeTeam']['name'])
+        at = clean_team_name(match['awayTeam']['name'])
         h_score = match['score']['fullTime']['home']
         a_score = match['score']['fullTime']['away']
         

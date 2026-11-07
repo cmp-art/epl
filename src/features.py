@@ -6,16 +6,16 @@ def generate_match_features(d):
     df = pd.read_csv(d)
     df = df.sort_values(by='datetime').reset_index(drop=True)
     
-    # 1. FIX MISSING OUTCOMES IMMEDIATELY
+    
     if 'ftr' not in df.columns:
         df['ftr'] = np.nan
         
     def determine_ftr(row):
-        # If it's a valid historical match, keep the result
+       
         if pd.notna(row.get('ftr')) and str(row.get('ftr')).strip().upper() in ['A', 'H', 'D']:
             return str(row.get('ftr')).strip().upper()
         
-        # If it's a new 2026 match missing the result, calculate it from the goals
+        
         if row['fthg'] > row['ftag']:
             return 'H'
         elif row['ftag'] > row['fthg']:
@@ -101,7 +101,7 @@ def generate_match_features(d):
     with open('models/latest_stats.json', 'w') as f:
         json.dump(latest_stats, f)
         
-    # 4. ENCODE AND CLEANUP (No NaNs will exist here now)
+    # 4. ENCODE AND CLEANUP
     df['ftr_encoded'] = df['ftr'].map({'A': 0, 'H': 2, 'D': 1})
    
     keep_columns = [
