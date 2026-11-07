@@ -27,8 +27,7 @@ TEAM_NAME_MAP = {
     "Manchester City FC":"Man City",
     "Brighton & Hove Albion":"Brighton",
     "Ipswich Town":"Ipswich"
-    
-}
+    }
 
 def clean_team_name(name):
     if name in TEAM_NAME_MAP:
