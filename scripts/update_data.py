@@ -25,13 +25,16 @@ TEAM_NAME_MAP = {
     "Newcastle United FC": "Newcastle",
     "Manchester United FC":"Man United",
     "Manchester City FC":"Man City"
+    "Brighton & Hove Albion":"Brighton",
+    "Ipswich Town":"",
+    
 }
 
 def clean_team_name(name):
     if name in TEAM_NAME_MAP:
         return TEAM_NAME_MAP[name]
     
-    name=name.replace(" FC","").replace(" AFC","")
+    name=name.replace(" FC","").replace(" AFC","").replace("AFC ","")
     return name.strip()
 
 def fetch_latest_result():
