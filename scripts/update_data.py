@@ -24,9 +24,9 @@ TEAM_NAME_MAP = {
     "Norwich City FC": "Norwich",
     "Newcastle United FC": "Newcastle",
     "Manchester United FC":"Man United",
-    "Manchester City FC":"Man City"
+    "Manchester City FC":"Man City",
     "Brighton & Hove Albion":"Brighton",
-    "Ipswich Town":"",
+    "Ipswich Town":"Ipswich"
     
 }
 
