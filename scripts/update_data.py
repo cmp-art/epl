@@ -25,8 +25,8 @@ TEAM_NAME_MAP = {
     "Newcastle United FC": "Newcastle",
     "Manchester United FC":"Man United",
     "Manchester City FC":"Man City",
-    "Brighton & Hove Albion":"Brighton",
-    "Ipswich Town":"Ipswich"
+    "Brighton & Hove Albion FC":"Brighton",
+    "Ipswich Town FC":"Ipswich"
     }
 
 def clean_team_name(name):
